@@ -11,6 +11,7 @@ cursor.execute('''
                 time VARCHAR(64),
                 ticker VARCHAR(64),
                 price INTEGER,
+                volume INTEGER,
                 buy_sell VARCHAR(64)
             )
             '''
@@ -18,13 +19,13 @@ cursor.execute('''
 
 cursor.execute('''
             INSERT INTO log(
-				time,ticker,price,buy_sell
+				time,ticker,price,volume,buy_sell
             )VALUES(
-                ?,?,?,?
+                ?,?,?,?,?
             );
             ''',
             (
-                '9:30','TVIX',15.62,'buy')
+                '9:30','TVIX',15.62,100,'buy')
 			)
 
 connection.commit()

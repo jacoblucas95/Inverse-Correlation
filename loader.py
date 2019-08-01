@@ -26,17 +26,23 @@ def quote_lookup():
 
     data = json.loads(content)
 
-    tvix_open = data['TVIX']['openPrice']
-    svxy_open = data['SVXY']['openPrice']
+    tvix_low = data['TVIX']['lowPrice']
+    svxy_low = data['SVXY']['lowPrice']
 
-    quote_dict['tvix_open'] = tvix_open
-    quote_dict['svxy_open'] = svxy_open
+    quote_dict['tvix_open'] = tvix_low
+    quote_dict['svxy_open'] = svxy_low
 
     tvix_current = data['TVIX']['lastPrice']
     svxy_current = data['SVXY']['lastPrice']
 
     quote_dict['tvix_current'] = tvix_current
     quote_dict['svxy_current'] = svxy_current
+
+    tvix_net_change = data['TVIX']['regularMarketNetChange']
+    svxy_net_change = data['SVXY']['regularMarketNetChange']
+
+    quote_dict['tvix_net_change'] = tvix_net_change
+    quote_dict['svxy_net_change'] = svxy_net_change
 
     return quote_dict
 

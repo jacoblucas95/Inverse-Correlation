@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import mapper import Database
+from mapper import Database
 
 def log():
-    pass
+    print('worked')

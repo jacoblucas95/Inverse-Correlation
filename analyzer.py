@@ -1,29 +1,12 @@
 #!/usr/bin/env python3
 
-import time
-import datetime
-from apscheduler.schedulers.background import BackgroundScheduler
-from loader import quote_lookup
-from buy_sell_log import log
+def tracker(quotes):
+    time_open = min(quotes, key=int)
+    time_now = max(quotes, key=int)
+    open_price = quotes[time_open]
+    current_price = quotes[time_now]
+    tvix_change = current_price['tvix'] - open_price['tvix']
+    svxy_change = current_price['svxy'] - open_price['svxy']
 
-REFRESH_INTERVAL = 30
-
-scheduler = BackgroundScheduler()
-scheduler.start()
-q_dict = {}
-
-def main():
-    my_function()
-    scheduler.add_job(my_function, 'interval', seconds = REFRESH_INTERVAL)
-    while True:
-        time.sleep(0.5)
-
-def my_function():
-    q = quote_lookup()
-    t = datetime.datetime.now()
-    current_time = '{}:{}'.format(t.hour,t.minute)
-    q_dict[current_time] = q
-    print(q_dict)
-
-if __name__ == '__main__':
-    main()
+    print(tvix_change)
+    print(svxy_change)

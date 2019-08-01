@@ -5,16 +5,15 @@ import time
 import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from buy_sell_log import log
-from analyzer import tracker
+from analyzer import Trades
 
 API_KEY = 'JRLUCAS'
 API_URL = 'https://api.tdameritrade.com/v1/marketdata/quotes'
 
-REFRESH_INTERVAL = 30
+REFRESH_INTERVAL = 600
 
 scheduler = BackgroundScheduler()
 scheduler.start()
-q_dict = {}
 
 def quote_lookup():
     quote_dict = {}
@@ -27,11 +26,17 @@ def quote_lookup():
 
     data = json.loads(content)
 
-    tvix = data['TVIX']['lastPrice']
-    svxy = data['SVXY']['lastPrice']
+    tvix_open = data['TVIX']['openPrice']
+    svxy_open = data['SVXY']['openPrice']
 
-    quote_dict['tvix'] = tvix
-    quote_dict['svxy'] = svxy
+    quote_dict['tvix_open'] = tvix_open
+    quote_dict['svxy_open'] = svxy_open
+
+    tvix_current = data['TVIX']['lastPrice']
+    svxy_current = data['SVXY']['lastPrice']
+
+    quote_dict['tvix_current'] = tvix_current
+    quote_dict['svxy_current'] = svxy_current
 
     return quote_dict
 
@@ -39,14 +44,13 @@ def main():
     loader()
     scheduler.add_job(loader, 'interval', seconds = REFRESH_INTERVAL)
     while True:
-        time.sleep(0.5)
+        time.sleep(10)
 
 def loader():
     q = quote_lookup()
     t = datetime.datetime.now()
     current_time = '{}{}'.format(t.hour,t.minute)
-    q_dict[current_time] = q
-    return tracker(q_dict)
+    return Trades.tracker(q)
 
 
 if __name__ == '__main__':

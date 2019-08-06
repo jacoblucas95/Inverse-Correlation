@@ -4,8 +4,7 @@ import json, requests
 import time
 import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
-from buy_sell_log import log
-from analyzer import Trades
+from analyzer import tracker
 
 API_KEY = 'JRLUCAS'
 API_URL = 'https://api.tdameritrade.com/v1/marketdata/quotes'
@@ -56,7 +55,7 @@ def loader():
     q = quote_lookup()
     t = datetime.datetime.now()
     current_time = '{}{}'.format(t.hour,t.minute)
-    return Trades.tracker(q)
+    return tracker(q)
 
 
 if __name__ == '__main__':

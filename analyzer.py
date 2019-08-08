@@ -16,25 +16,72 @@ def tracker(quotes):
             db.cursor.execute('''SELECT price FROM log WHERE ticker="{}";
             '''.format('TVIX'))
             latest_trade_price = db.cursor.fetchall()[-1][0]
+            no_trades = len(db.cursor.fetchall())
         latest_change = quotes['tvix_current'] - latest_trade_price
-        if latest_change >= 0.8 or latest_change <= -0.5:
-            return Trader.tvix_trade_log('TVIX',quotes['tvix_open'],quotes['tvix_current'])
-            # TODO: buy and sell
+
+        with Database() as db:
+            db.cursor.execute('''SELECT stop_loss FROM log WHERE ticker="{}";
+            '''.format('TVIX'))
+        current_stop_loss = db.cursor.fetchall()[-1][0]
+
+        if current_stop_loss <= quotes['tvix_current']:
+            pass
+            ## TODO: sell all
+
+        elif latest_change >= 0.8:
+            # TODO: lever up
+            pass
+
         else:
-            return Trader.tvix_trade_log('TVIX',quotes['tvix_open'],quotes['tvix_current'])
-        # if tvix_change <= -0.5:
-        #     # TODO: sell function
-        #     pass
-        # else:
-        #     pass
-            # return Trades.tvix_risk_mgt('TVIX', quotes['tvix_open'], quotes['tvix_current'])
+            # initial trade at 100 shares
+            stop_loss = quotes['tvix_current'] - 0.50
+            return Trader.tvix_trade_log('TVIX',quotes['tvix_open'],quotes['tvix_current'],stop_loss)
+
+
+
+
+
+
+
+
+
+
+
+
     elif tvix_change < 0.3 and svxy_change > 0.3:
-        svxy_sl += quotes['svxy_current']
-        if svxy_change <= -0.5:
-            #sell function
+        with Database() as db:
+            db.cursor.execute('''SELECT price FROM log WHERE ticker="{}";
+            '''.format('SVXY'))
+            all_trades = db.cursor.fetchall()
+        try:
+            latest_trade_price = all_trades[-1][0]
+            no_trades = len(all_trades)
+            latest_change = quotes['svxy_current'] - latest_trade_price
+        except:
+            latest_trade_price = 0
+            latest_change = 0
+
+        with Database() as db:
+            db.cursor.execute('''SELECT stop_loss FROM log WHERE ticker="{}";
+            '''.format('SVXY'))
+        try:
+            current_stop_loss = db.cursor.fetchall()[-1][0]
+        except:
+            current_stop_loss = 0
+
+        if current_stop_loss >= quotes['svxy_current']:
             pass
+            ## TODO: sell all
+
+        elif latest_change >= 0.8:
+            # TODO: lever up
+            stop_loss = quotes['svxy_current'] - 0.50
+            return Trader.svxy_trade_log('SVXY',quotes['svxy_open'],quotes['svxy_current'],stop_loss)
+
         else:
-            pass
-            # return Trades.svxy_risk_mgt('SVXY', quotes['svxy_open'], quotes['svxy_current'])
+            # initial trade at 100 shares
+            stop_loss = quotes['svxy_current'] - 0.50
+            return Trader.svxy_trade_log('SVXY',quotes['svxy_open'],quotes['svxy_current'],stop_loss)
+
     else:
         print('no dice')

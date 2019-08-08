@@ -16,23 +16,23 @@ class Trader:
     def __exit__(self):
         pass
 
-    def tvix_trade_log(ticker,open_price, current_price):
+    def tvix_trade_log(ticker, open_price, current_price, stop_loss):
         with Database() as db:
             db.cursor.execute(
                 '''
-                    INSERT INTO log(time,ticker,price,volume,buy_sell)
-                    VALUES(?,?,?,?,?);
+                    INSERT INTO log(time,ticker,price,stop_loss,volume,buy_sell)
+                    VALUES(?,?,?,?,?,?);
                 ''',
-                    (tm,ticker,current_price,100,'buy')
+                    (tm,ticker,current_price,stop_loss,100,'buy')
             )
         print('bought')
 
-    def svxy_trade_log(ticker, open_price, current_price):
+    def svxy_trade_log(ticker, open_price, current_price, stop_loss):
         with Database() as db:
             db.cursor.execute(
-                '''INSERT INTO log(time,ticker,price,volume,buy_sell)
-                    VALUES(?,?,?,?,?);
+                '''INSERT INTO log(time,ticker,price,stop_loss,volume,buy_sell)
+                    VALUES(?,?,?,?,?,?);
                 ''',
-                    (tm,ticker,current_price,100,'buy')
+                    (tm,ticker,current_price,stop_loss,100,'buy')
             )
         print('bought')

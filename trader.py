@@ -39,7 +39,19 @@ class Trader:
         print('bought')
 
     def tvix_sell_gains(sell_price):
-        pass
+        with Database() as db:
+            db.cursor.execute(
+            '''SELECT * FROM log WHERE ticker="TVIX";'''
+            )
+            all_trades = db.cursor.fetchall()
+
+        gain_dict = {}
+        overall_gains = 0
+        for i in all_trades:
+            gain = i[3] - sell_price
+            gain_dict[i[1]] = gain
+        print('closed tvix position')
+        print(gain_dict)
 
     def svxy_sell_gains(sell_price):
         with Database() as db:
@@ -53,5 +65,5 @@ class Trader:
         for i in all_trades:
             gain = i[3] - sell_price
             gain_dict[i[1]] = gain
-
+        print('closed svxy position')
         print(gain_dict)

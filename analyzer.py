@@ -33,8 +33,8 @@ def tracker(quotes):
             current_stop_loss = 0
 
         if current_stop_loss >= quotes['TVIX_current']:
-            pass
-            ## TODO: sell all
+            sell_price = quotes['tvix_current']
+            return trader.tvix_sell_gains(sell_price)
 
         elif latest_change >= 0.8:
             # TODO: lever up

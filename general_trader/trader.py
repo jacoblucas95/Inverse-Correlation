@@ -25,7 +25,7 @@ class Trader:
                 ''',
                     (tm,ticker,current_price,stop_loss,100,'buy')
             )
-        print('bought')
+        print('bought tvix')
 
     def svxy_buy_trade_log(ticker, open_price, current_price, stop_loss):
         with Database() as db:
@@ -36,7 +36,7 @@ class Trader:
                 ''',
                     (tm,ticker,current_price,stop_loss,100,'buy')
             )
-        print('bought')
+        print('bought svxy')
 
     def tvix_sell_gains(sell_price):
         with Database() as db:
@@ -48,10 +48,14 @@ class Trader:
         gain_dict = {}
         overall_gains = 0
         for i in all_trades:
-            gain = i[3] - sell_price
+            gain = sell_price - i[3]
             gain_dict[i[1]] = gain
         print('closed tvix position')
-        print(gain_dict)
+        gains = 0
+        for k,v in gain_dict.items():
+            share_gain = v * 100
+            gains += share_gain
+        print(gains)
 
     def svxy_sell_gains(sell_price):
         with Database() as db:
@@ -63,7 +67,11 @@ class Trader:
         gain_dict = {}
         overall_gains = 0
         for i in all_trades:
-            gain = i[3] - sell_price
+            gain = sell_price - i[3]
             gain_dict[i[1]] = gain
         print('closed svxy position')
-        print(gain_dict)
+        gains = 0
+        for k,v in gain_dict.items():
+            share_gain = v * 100
+            gains += share_gain
+        print(gains)

@@ -32,21 +32,23 @@ def tracker(quotes):
         except:
             current_stop_loss = 0
 
-        if current_stop_loss >= quotes['TVIX_current']:
+        if current_stop_loss >= quotes['tvix_current']:
             sell_price = quotes['tvix_current']
             return trader.tvix_sell_gains(sell_price)
 
         elif latest_change >= 0.8:
-            # TODO: lever up
             stop_loss = quotes['svxy_current'] - 0.50
-            return Trader.tvix_buy_trade_log('TVIX',quotes['tvix_open'],
+            return Trader.tvix_buy_trade_log('TVIX',0,
             quotes['tvix_current'],stop_loss)
 
-        else:
-            # initial trade at 100 shares
+        elif no_trades == 0:
             stop_loss = quotes['tvix_current'] - 0.50
-            return Trader.tvix_buy_trade_log('TVIX',quotes['tvix_open'],
+            return Trader.tvix_buy_trade_log('TVIX',0,
             quotes['tvix_current'],stop_loss)
+        else:
+            sell_price = quotes['tvix_current']
+            return Trader.tvix_sell_gains(sell_price)
+            print('no tvix trades')
 
     elif tvix_change < 0.3 and svxy_change > 0.3:
         with Database() as db:

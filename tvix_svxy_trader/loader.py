@@ -9,7 +9,7 @@ from analyzer import tracker
 API_KEY = 'JRLUCAS'
 API_URL = 'https://api.tdameritrade.com/v1/marketdata/quotes'
 
-REFRESH_INTERVAL = 600
+REFRESH_INTERVAL = 300
 
 scheduler = BackgroundScheduler()
 scheduler.start()
@@ -24,12 +24,6 @@ def quote_lookup():
     content = requests.get(url=(API_URL),params=params).text
 
     data = json.loads(content)
-
-    tvix_low = data['TVIX']['lowPrice']
-    svxy_low = data['SVXY']['lowPrice']
-
-    quote_dict['tvix_open'] = tvix_low
-    quote_dict['svxy_open'] = svxy_low
 
     tvix_current = data['TVIX']['lastPrice']
     svxy_current = data['SVXY']['lastPrice']
@@ -49,14 +43,14 @@ def main():
     loader()
     scheduler.add_job(loader, 'interval', seconds = REFRESH_INTERVAL)
     while True:
-        time.sleep(10)
+        time.sleep(5)
 
 def loader():
     q = quote_lookup()
+    return q
     t = datetime.datetime.now()
     current_time = '{}{}'.format(t.hour,t.minute)
     return tracker(q)
-
 
 if __name__ == '__main__':
     main()

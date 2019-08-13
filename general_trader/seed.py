@@ -17,17 +17,6 @@ cursor.execute('''
             )
             '''
             )
-#
-# cursor.execute('''
-#             INSERT INTO log(
-# 				time,ticker,price,stop_loss,volume,buy_sell
-#             )VALUES(
-#                 ?,?,?,?,?,?
-#             );
-#             ''',
-#             (
-#                 '9:30','SVXY',15.62,15.12,100,'buy')
-# 			)
 
 connection.commit()
 

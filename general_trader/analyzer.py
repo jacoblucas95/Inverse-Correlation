@@ -79,13 +79,13 @@ def tracker(quotes):
         elif latest_change >= 0.8:
             # TODO: lever up
             stop_loss = quotes['svxy_current'] - 0.50
-            return Trader.svxy_buy_trade_log('SVXY',quotes['svxy_open'],
+            return Trader.svxy_buy_trade_log('SVXY',0,
             quotes['svxy_current'],stop_loss)
 
         elif no_trades == 0:
             # initial trade at 100 shares
             stop_loss = quotes['svxy_current'] - 0.50
-            return Trader.svxy_buy_trade_log('SVXY',quotes['svxy_open'],
+            return Trader.svxy_buy_trade_log('SVXY',0,
             quotes['svxy_current'],stop_loss)
         else:
             print('no trades for svxy')

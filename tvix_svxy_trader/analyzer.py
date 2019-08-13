@@ -23,6 +23,7 @@ def tracker(quotes):
         except:
             latest_trade_price = 0
             latest_change = 0
+            no_trades = 0
 
         with Database() as db:
             db.cursor.execute('''SELECT stop_loss FROM log WHERE ticker="{}";
@@ -34,21 +35,22 @@ def tracker(quotes):
 
         if current_stop_loss >= quotes['tvix_current']:
             sell_price = quotes['tvix_current']
-            return trader.tvix_sell_gains(sell_price)
+            print('sold tvix')
+            return Trader.tvix_sell_gains(sell_price)
 
         elif latest_change >= 0.8:
             stop_loss = quotes['svxy_current'] - 0.50
+            print('levered tvix')
             return Trader.tvix_buy_trade_log('TVIX',0,
             quotes['tvix_current'],stop_loss)
 
         elif no_trades == 0:
             stop_loss = quotes['tvix_current'] - 0.50
+            print('initial tvix trade')
             return Trader.tvix_buy_trade_log('TVIX',0,
             quotes['tvix_current'],stop_loss)
         else:
-            sell_price = quotes['tvix_current']
-            return Trader.tvix_sell_gains(sell_price)
-            print('no tvix trades')
+            print('no tvix movement')
 
     elif tvix_change < 0.3 and svxy_change > 0.3:
         with Database() as db:
@@ -73,21 +75,22 @@ def tracker(quotes):
             current_stop_loss = 0
 
         if current_stop_loss >= quotes['svxy_current']:
+            print('sold svxy')
             sell_price = quotes['svxy_current']
             return trader.svxy_sell_gains(sell_price)
 
         elif latest_change >= 0.8:
-            # TODO: lever up
+            print('levered svxy')
             stop_loss = quotes['svxy_current'] - 0.50
-            return Trader.svxy_buy_trade_log('SVXY',quotes['svxy_open'],
+            return Trader.svxy_buy_trade_log('SVXY',0,
             quotes['svxy_current'],stop_loss)
 
         elif no_trades == 0:
-            # initial trade at 100 shares
             stop_loss = quotes['svxy_current'] - 0.50
-            return Trader.svxy_buy_trade_log('SVXY',quotes['svxy_open'],
+            print('initial svxy trade')
+            return Trader.svxy_buy_trade_log('SVXY',0,
             quotes['svxy_current'],stop_loss)
         else:
-            print('no trades for svxy')
+            print('no svxy movement')
     else:
         print('no dice')

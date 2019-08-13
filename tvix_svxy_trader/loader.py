@@ -31,8 +31,8 @@ def quote_lookup():
     quote_dict['tvix_current'] = tvix_current
     quote_dict['svxy_current'] = svxy_current
 
-    tvix_net_change = data['TVIX']['regularMarketNetChange']
-    svxy_net_change = data['SVXY']['regularMarketNetChange']
+    tvix_net_change = data['TVIX']['netChange']
+    svxy_net_change = data['SVXY']['netChange']
 
     quote_dict['tvix_net_change'] = tvix_net_change
     quote_dict['svxy_net_change'] = svxy_net_change
@@ -47,7 +47,7 @@ def main():
 
 def loader():
     q = quote_lookup()
-    return q
+    print(q)
     t = datetime.datetime.now()
     current_time = '{}{}'.format(t.hour,t.minute)
     return tracker(q)

@@ -5,6 +5,8 @@ import time
 import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from analyzer import tracker
+from mapper import Database
+from trader import Trader
 
 API_KEY = 'JRLUCAS'
 API_URL = 'https://api.tdameritrade.com/v1/marketdata/quotes'
@@ -48,9 +50,23 @@ def main():
 def loader():
     q = quote_lookup()
     print(q)
-    t = datetime.datetime.now()
-    current_time = '{}{}'.format(t.hour,t.minute)
-    return tracker(q)
+    with Database() as db:
+        db.cursor.execute('''SELECT stop_loss FROM log;''')
+        all_stop_loss = db.cursor.fetchall()
+    latest_stop_loss = all_stop_loss[-1][0]
+    with Database() as db:
+        db.cursor.execute('''SELECT ticker from log WHERE stop_loss="{}";
+        '''.format(latest_stop_loss))
+        ticker = db.cursor.fetchone()[0]
+    tick = ticker.lower()
+    tick_current = q['{}_current'.format(tick)]
+    if latest_stop_loss >= tick_current:
+        if tick == 'tvix':
+            return Trader.tvix_sell_gains(tick_current)
+        else:
+            return Trader.svxy_sell_gains(tick_current)
+    else:
+        return tracker(q)
 
 if __name__ == '__main__':
     main()

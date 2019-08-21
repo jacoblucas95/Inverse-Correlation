@@ -16,7 +16,7 @@ class Trader:
     def __exit__(self):
         pass
 
-    def tvix_buy_trade_log(ticker, open_price, current_price, stop_loss):
+    def buy_trade_log(ticker, open_price, current_price, stop_loss):
         with Database() as db:
             db.cursor.execute(
                 '''
@@ -25,18 +25,7 @@ class Trader:
                 ''',
                     (tm,ticker,current_price,stop_loss,100,'buy')
             )
-        print('bought tvix')
-
-    def svxy_buy_trade_log(ticker, open_price, current_price, stop_loss):
-        with Database() as db:
-            db.cursor.execute(
-                '''
-                    INSERT INTO log(time,ticker,price,stop_loss,volume,buy_sell)
-                    VALUES(?,?,?,?,?,?);
-                ''',
-                    (tm,ticker,current_price,stop_loss,100,'buy')
-            )
-        print('bought svxy')
+        print('bought {}'.format(ticker))
 
     def tvix_sell_gains(sell_price):
         with Database() as db:

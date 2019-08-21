@@ -57,6 +57,11 @@ class Trader:
             gains += share_gain
         print(gains)
 
+        with Database() as db:
+            db.cursor.execute(
+            '''DELETE FROM log WHERE ticker="TVIX";'''
+            )
+
     def svxy_sell_gains(sell_price):
         with Database() as db:
             db.cursor.execute(
@@ -75,3 +80,8 @@ class Trader:
             share_gain = v * 100
             gains += share_gain
         print(gains)
+
+        with Database() as db:
+            db.cursor.execute(
+            '''DELETE FROM log WHERE ticker="SVXY";'''
+            )

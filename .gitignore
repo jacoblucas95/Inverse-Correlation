@@ -80,4 +80,4 @@ ENV/
 /site
 # mypy
 .mypy_cache/
-/tvix_svxy_trader/config
+/tvix_svxy_trader/config.py

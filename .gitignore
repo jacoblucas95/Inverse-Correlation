@@ -80,4 +80,4 @@ ENV/
 /site
 # mypy
 .mypy_cache/
-/config.py
+*config.py

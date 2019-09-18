@@ -7,8 +7,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from analyzer import tracker
 from mapper import Database
 from trader import Trader
+from config import client_id
 
-API_KEY = 'JRLUCAS'
+API_KEY = client_id
 API_URL = 'https://api.tdameritrade.com/v1/marketdata/quotes'
 
 REFRESH_INTERVAL = 300

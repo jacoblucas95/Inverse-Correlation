@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 import json, requests
-import time
-import datetime
-from apscheduler.schedulers.background import BackgroundScheduler
 from analyzer import tracker
 from mapper import Database
 from trader import Trader
@@ -11,11 +8,6 @@ from config import client_id
 
 API_KEY = client_id
 API_URL = 'https://api.tdameritrade.com/v1/marketdata/quotes'
-
-REFRESH_INTERVAL = 300
-
-scheduler = BackgroundScheduler()
-scheduler.start()
 
 def quote_lookup():
     quote_dict = {}
@@ -41,12 +33,6 @@ def quote_lookup():
     quote_dict['svxy_net_change'] = svxy_net_change
 
     return quote_dict
-
-def main():
-    loader()
-    scheduler.add_job(loader, 'interval', seconds = REFRESH_INTERVAL)
-    while True:
-        time.sleep(5)
 
 def loader():
     q = quote_lookup()
@@ -74,6 +60,3 @@ def loader():
                 return tracker(q)
         except:
             return tracker(q)
-
-if __name__ == '__main__':
-    main()

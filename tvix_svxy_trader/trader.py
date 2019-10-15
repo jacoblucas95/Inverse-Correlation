@@ -5,6 +5,8 @@ import datetime
 
 t = datetime.datetime.now()
 tm = '{}{}'.format(t.hour,t.minute)
+dt = '{}{}{}'.format(t.day, t.month, t.year)
+date = int(dt)
 
 class Trader:
     def __init__(self):
@@ -62,6 +64,12 @@ class Trader:
             '''DELETE FROM log WHERE ticker="TVIX";'''
             )
 
+            db.cursor.execute(
+            '''INSERT INTO profit_loss(date, ticker, p_l)
+                VALUES(?,?,?);
+            ''',(date,'TVIX',gains)
+            )
+
     def svxy_sell_gains(sell_price):
         with Database() as db:
             db.cursor.execute(
@@ -84,4 +92,10 @@ class Trader:
         with Database() as db:
             db.cursor.execute(
             '''DELETE FROM log WHERE ticker="SVXY";'''
+            )
+
+            db.cursor.execute(
+            '''INSERT INTO profit_loss(date, ticker, p_l)
+                VALUES(?,?,?);
+            ''',(date,'SVXY',gains)
             )

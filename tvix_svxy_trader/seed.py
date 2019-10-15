@@ -29,6 +29,16 @@ cursor.execute('''
                 '9:30','SVXY',15.62,15.12,100,'buy')
 			)
 
+cursor.execute('''
+            CREATE TABLE profit_loss(
+                pk INTEGER PRIMARY KEY AUTOINCREMENT,
+                date INTEGER,
+                ticker VARCHAR,
+                p_l INTEGER
+            )
+            '''
+            )
+
 connection.commit()
 
 cursor.close()
